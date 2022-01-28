@@ -7,6 +7,13 @@ Followed the steps in [build a Serverless Data Engineering Walkthrough](https://
 3. created the virtual environment ~/.comprehend
 4. installed the requirements
 5. created the test script example_src/test.py
+6. created a lambda function (python39) called producer with AdminPolicy permissions
+7. created an SQS producer resource to pool requests
+8. created a table in dynamodb called poducer-hello to handle FANG data
+9. copied the code in section "Using AWS Lambda to populate AWS SQS (Simple Queuing Service)" from "beginners_guide_aws_lambda.ipynb"
+10. deployed the lambda function
+11. created cloudwatch trigger
+12. fixed the pythonjsonlogger install # TODO
 
 [![CircleCI](https://circleci.com/gh/noahgift/functional_intro_to_python.svg?style=svg&circle-token=d3ccec4d9ec6d4f1052ec528e22dc26554502cde)](https://circleci.com/gh/noahgift/awslambda)
 
