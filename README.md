@@ -1,3 +1,13 @@
+## Work on fork
+
+Followed the steps in [![build a Serverless Data Engineering Walkthrough](https://img.youtube.com/vi/zXxdbtamoa4/0.jpg)](https://www.youtube.com/watch?v=zXxdbtamoa4)
+
+1. cloned the github repo into cloud9
+2. created a requirements file with ipython and boto3 to test the comprehend api
+3. created the virtual environment ~/.comprehend
+4. installed the requirements
+5. created the test script example_src/test.py
+
 [![CircleCI](https://circleci.com/gh/noahgift/functional_intro_to_python.svg?style=svg&circle-token=d3ccec4d9ec6d4f1052ec528e22dc26554502cde)](https://circleci.com/gh/noahgift/awslambda)
 
 # AWS Lambda
