@@ -1,6 +1,6 @@
 ## Work on fork
 
-Followed the steps in [![build a Serverless Data Engineering Walkthrough](https://img.youtube.com/vi/zXxdbtamoa4/0.jpg)](https://www.youtube.com/watch?v=zXxdbtamoa4)
+Followed the steps in [build a Serverless Data Engineering Walkthrough](https://img.youtube.com/vi/zXxdbtamoa4/0.jpg)
 
 1. cloned the github repo into cloud9
 2. created a requirements file with ipython and boto3 to test the comprehend api
