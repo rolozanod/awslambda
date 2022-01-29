@@ -16,7 +16,9 @@ Followed the steps in [build a Serverless Data Engineering Walkthrough](https://
 11. created cloudwatch trigger
 12. fixed the pythonjsonlogger install
     - added a layer with the logger following [these steps](https://towardsdatascience.com/python-packages-in-aws-lambda-made-easy-8fbc78520e30)
-13. 
+13. created consumer lambda with AdminAccess permissions
+14. created layer with pandas and wikipedia packages for consumer on cloud9
+15. 
 
 [![CircleCI](https://circleci.com/gh/noahgift/functional_intro_to_python.svg?style=svg&circle-token=d3ccec4d9ec6d4f1052ec528e22dc26554502cde)](https://circleci.com/gh/noahgift/awslambda)
 
