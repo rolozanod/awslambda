@@ -13,12 +13,16 @@ Followed the steps in [build a Serverless Data Engineering Walkthrough](https://
 8. created a table in dynamodb called poducer-hello to handle FANG data
 9. copied the code in section "Using AWS Lambda to populate AWS SQS (Simple Queuing Service)" from "beginners_guide_aws_lambda.ipynb"
 10. deployed the lambda function
-11. created cloudwatch trigger
-12. fixed the pythonjsonlogger install
+11. created cloudwatch trigger and added it to the producer lambda function
+12. created an S3 bucket to store the sentiment analysis
+13. fixed the pythonjsonlogger install
     - added a layer with the logger following [these steps](https://towardsdatascience.com/python-packages-in-aws-lambda-made-easy-8fbc78520e30)
-13. created consumer lambda with AdminAccess permissions
-14. created layer with pandas and wikipedia packages for consumer on cloud9
-15. 
+14. created consumer lambda with AdminAccess permissions
+15. created layer with pandas and wikipedia packages for consumer on cloud9
+16. added both layers, the one with pandas and wikipedia and the one with the logger
+17. changed "name" key name to "guid" as it is used in the dynamodb table in the consumer code and redeployed
+18. modifying consumer script by adding "region_name=REGION" to S3 resource
+19. 
 
 [![CircleCI](https://circleci.com/gh/noahgift/functional_intro_to_python.svg?style=svg&circle-token=d3ccec4d9ec6d4f1052ec528e22dc26554502cde)](https://circleci.com/gh/noahgift/awslambda)
 

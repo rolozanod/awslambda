@@ -1,9 +1,8 @@
 import json
 
-import boto3
 import botocore
+import botocore.exceptions
 
-# import pandas as pd
 import pandas as pd
 import wikipedia
 import boto3
@@ -22,7 +21,8 @@ logHandler.setFormatter(formatter)
 LOG.addHandler(logHandler)
 
 # S3 BUCKET
-REGION = "us-east-1"
+BUCKETNAME = "fangsentiment-ue2"
+REGION = "us-east-2"
 
 ### SQS Utils###
 def sqs_queue_resource(queue_name):
@@ -133,17 +133,37 @@ def apply_sentiment(df, column="wikipedia_snippit"):
 
 ### S3 ###
 
-
 def write_s3(df, bucket, name):
     """Write S3 Bucket"""
-
-    csv_buffer = StringIO()
-    df.to_csv(csv_buffer)
-    s3_resource = boto3.resource("s3")
+    if type(name) is list:
+        name = name[0]
+        
     filename = f"{name}_sentiment.csv"
-    res = s3_resource.Object(bucket, filename).put(Body=csv_buffer.getvalue())
-    LOG.info(f"result of write to bucket: {bucket} with:\n {res}")
 
+    LOG.info(f"Trying to save {name} data to {bucket}")
+    
+
+    try:
+        LOG.info(f"Connecting to S3 bucket for {name}")
+        s3_client = boto3.client('s3')
+        LOG.info(f"Connected to S3 bucket for {name}")
+        
+        csv_buffer = StringIO()
+        df.to_csv(csv_buffer)
+        LOG.info(f"{name} buffer created")
+        
+        with csv_buffer as f:
+            s3_client.upload_fileobj(f, bucket, filename)
+        # res = s3_client.Object(bucket, filename).put(Body=csv_buffer.getvalue())
+        LOG.info(f"result of write {name} to bucket: {bucket} with:\n {res}")
+    
+    except botocore.exceptions.ClientError as error:
+        # Put your error handling logic here
+        LOG.info(f"{str(error)}")
+        raise error
+
+    except botocore.exceptions.ParamValidationError as error:
+        raise ValueError('The parameters you provided are incorrect: {}'.format(error))
 
 def lambda_handler(event, context):
     """Entry Point for Lambda"""
@@ -158,7 +178,7 @@ def lambda_handler(event, context):
     # Process Queue
     for record in event["Records"]:
         body = json.loads(record["body"])
-        company_name = body["name"]
+        company_name = body["guid"]
 
         # Capture for processing
         names.append(company_name)
@@ -174,11 +194,11 @@ def lambda_handler(event, context):
             f"Attemping Deleting SQS receiptHandle {receipt_handle} with queue_name {qname}",
             extra=extra_logging,
         )
-        res = delete_sqs_msg(queue_name=qname, receipt_handle=receipt_handle)
-        LOG.info(
-            f"Deleted SQS receipt_handle {receipt_handle} with res {res}",
-            extra=extra_logging,
-        )
+        # res = delete_sqs_msg(queue_name=qname, receipt_handle=receipt_handle)
+        # LOG.info(
+        #     f"Deleted SQS receipt_handle {receipt_handle} with res {res}",
+        #     extra=extra_logging,
+        # )
 
     # Make Pandas dataframe with wikipedia snippts
     LOG.info(f"Creating dataframe with values: {names}")
@@ -189,4 +209,4 @@ def lambda_handler(event, context):
     LOG.info(f"Sentiment from FANG companies: {df.to_dict()}")
 
     # Write result to S3
-    write_s3(df=df, bucket="fangsentiment", name=names)
+    write_s3(df=df, bucket=BUCKETNAME, name=names)
